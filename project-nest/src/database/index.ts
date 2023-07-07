@@ -16,7 +16,22 @@ export default function MysqlConnection (){
     password: '',
     database: 'one_dollar',
     entities: [Users, Customers, Orders, slot_deals, Product],
+    logging: true
     // synchronize: true,
     
   })
+
+// return  TypeOrmModule.forRoot({
+//   type: 'mysql',
+//   host: '127.0.0.1',
+//   port: 3306,
+//   username: 'chetoitp_vanchhai',
+//   password: 'vanchhai1596',
+//   database: 'chetoitp_test',
+//   entities: [Users, Customers, Orders, slot_deals, Product],
+//   // synchronize: true,
+  
+// })
 }
+
+
