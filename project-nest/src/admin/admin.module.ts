@@ -14,6 +14,9 @@ import { BullModule } from '@nestjs/bull';
 import { SendComsumer } from './send.consumer';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TasksService } from './task.service';
+import { SubCategoryModule } from './sub-category/sub-category.module';
+import { InventoryModule } from './inventory/inventory.module';
+import { FilesModule } from './files/files.module';
 
 
 @Module({
@@ -33,7 +36,10 @@ import { TasksService } from './task.service';
     CustomersModule, 
     OrdersModule,
     SlotDealModule,
-    ProductsModule
+    ProductsModule,
+    SubCategoryModule,
+    InventoryModule,
+    FilesModule,
   ],
   controllers: [AdminController],
   providers: [AdminService, SendComsumer, TasksService],

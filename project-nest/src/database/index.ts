@@ -14,9 +14,12 @@ export default function MysqlConnection (){
     port: 3306,
     username: 'root',
     password: '',
-    database: 'one_dollar',
+    database: 'shop',
     entities: [Users, Customers, Orders, slot_deals, Product],
-    logging: true
+    migrations: [
+      "migration/*.js"
+  ]
+    // logging: true
     // synchronize: true,
     
   })
@@ -27,7 +30,7 @@ export default function MysqlConnection (){
 //   port: 3306,
 //   username: 'chetoitp_vanchhai',
 //   password: 'vanchhai1596',
-//   database: 'chetoitp_test',
+//   database: 'chetoitp_services',
 //   entities: [Users, Customers, Orders, slot_deals, Product],
 //   // synchronize: true,
   

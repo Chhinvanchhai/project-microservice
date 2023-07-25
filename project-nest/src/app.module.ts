@@ -8,12 +8,22 @@ import MysqlConnection from './database/index'
 // import { JwtModule } from '@nestjs/jwt'
 import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './admin/user/user.module';
+import { FrontModule } from './front/front.module';
+import { MulterModule } from '@nestjs/platform-express';
 @Module({
   imports: [ 
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot(
+      {
+   
+        isGlobal: true,
+      }
+    ),
     MysqlConnection(), 
+    MulterModule.register({
+      dest: './uploads',
+    }),
     AdminModule, 
-    UserModule,
+    UserModule, FrontModule,
   ],
   controllers: [AppController],
   providers: [AppService],

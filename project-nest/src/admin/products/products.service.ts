@@ -5,7 +5,6 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { Like, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
-import { Console } from 'console';
 
 @Injectable()
 export class ProductsService {
@@ -24,20 +23,17 @@ export class ProductsService {
   }
 
   async pagination(query) {
-    console.log(query, 'query');
     let queryString = {};
-    const perPage = query.rowsPerPage || 15;
+    const rowsPerPage = query.rowsPerPage || 15;
     const page = query.page || 1;
+    const skip = (page - 1) * rowsPerPage; 
     const sortBy = query.sortBy || 'name';
     const keyword = query.key || '';
     const sortOrder = query.descending == 'true' ? 'asc' : 'desc';
 
     queryString = {
-      skip: page,
-      take: perPage,
-      where: {
-        name: Like(`%${keyword} %`),
-      },
+      skip: skip,
+      take: rowsPerPage,
       order: {
         [sortBy]: sortOrder,
       },
@@ -45,7 +41,7 @@ export class ProductsService {
     if (keyword != '') {
       queryString = {
         where: {
-          name: Like(`%${keyword} %`),
+          name: Like(`%${keyword}%`),
         },
         order: {
           [sortBy]: sortOrder,
@@ -53,13 +49,14 @@ export class ProductsService {
       };
     }
 
-    const result = await this.productRepository.find(queryString);
-    console.log(result);
+    console.log(keyword);
+    const result = await this.productRepository.createQueryBuilder("products")
+    .where("products.id = :id", { id: 2 })
+    .getOne()
     return result;
   }
 
   findOne(id) {
-    console.log('id product: ' + id);
     return this.productRepository.find({ where: { id: id } });
   }
 
@@ -70,7 +67,6 @@ export class ProductsService {
         ...product[0],
         ...updateProductDto,
       };
-      console.log(updateD);
       return await this.productRepository.save(updateD);
     }
   }
@@ -78,4 +74,5 @@ export class ProductsService {
   remove(id: number) {
     return this.productRepository.delete(id);
   }
+
 }

@@ -18,7 +18,7 @@ export class AppService {
   
   createUser(createUserRequest: CreateUserRequest) {
     this.users.push(createUserRequest);
-    console.log('on api emit careate_user======')
+    console.log('api gateways======')
     this.projectMircoService.emit('create_project', new CreateUserEvent(createUserRequest.name));
     this.communicationService.emit('create_user', new CreateUserEvent(createUserRequest.name))
     return createUserRequest;

@@ -11,6 +11,9 @@ export class Product {
   name: string;
 
   @Column()
+  sub_category_id: number;
+
+  @Column()
   category_id: number;
 
   @Column()
@@ -18,5 +21,29 @@ export class Product {
 
   @Column()
   quantity: number;
+
+  @Column()
+  slug: string;
+
+  @Column()
+  meta_title: string;
+
+  @Column()
+  meta_description: string;
+
+  @Column()
+  meta_keywords: string;
+
+  @Column()
+  views: number;
+
+  // @Column({ nullable: true })
+  // media: number;
+
+  @Column()
+  created_at: Date;
+
+  @Column()
+  updated_at: Date;
 
 }

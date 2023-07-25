@@ -8,13 +8,13 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
     ClientsModule.register([
       {
         name: 'ANALYTICS',
-        transport: Transport.TCP,
-        options: { port: 3001 },
+        transport: Transport.REDIS,
+        options: { port: 6379, host: 'localhost' },
       },
       {
         name: 'PROJECT',
-        transport: Transport.TCP,
-        options: { port: 3002 },
+        transport: Transport.REDIS,
+        options: { port: 6379, host: '127.0.0.1' },
       },
     ]),
   ],

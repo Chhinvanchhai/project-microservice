@@ -11,25 +11,29 @@ export class AdminMiddleware implements NestMiddleware {
   constructor(private jwtService: JwtService) {}
   
   async use(req: Request, res: Response, next: NextFunction) {
-    // const token = this.extractTokenFromHeader(req);
-    // console.log(token, 'token');
-    // if (!token) {
-    //   throw new UnauthorizedException();
-    // }
-    // try {
-    //   const payload = await this.jwtService.verifyAsync(
-    //     token,
-    //     {
-    //       secret: jwtConstants.secret
-    //     }
-    //   );
-    //   console.log(payload, 'payload');
-    //   next();
-    // } catch {
-    //   throw new UnauthorizedException();
-    // }
+    const token = this.extractTokenFromHeader(req);
+    console.log(token);
+    try {
+      if(req.path != "/user/login") {
+        if(token) {
+          const payload = await this.jwtService.verifyAsync(
+            token,
+            {
+              secret: jwtConstants.secret
+            }
+          );
+          req['user'] = payload;
+          next();
+        } else {
+          throw new UnauthorizedException();
+        }
+      }
 
-    next();
+    } catch(e) {
+      console.log(e);
+      throw new UnauthorizedException();
+    }
+
   }
 
   private extractTokenFromHeader(request: Request): string | undefined {
