@@ -1,10 +1,10 @@
 /* eslint-disable prettier/prettier */
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Users } from '../admin/user/user.entity'
-import { Customers } from 'src/admin/customers/customers.entity';
-import { Orders } from 'src/admin/entity/orders.entity';
-import { slot_deals } from 'src/admin/entity/slot_deals.entity';
-import { Product } from 'src/admin/products/entities/product.entity';
+// import { Users } from '../admin/user/user.entity'
+// import { Customers } from 'src/admin/customers/customers.entity';
+// import { Orders } from 'src/admin/entity/orders.entity';
+// import { slot_deals } from 'src/admin/entity/slot_deals.entity';
+// import { Product } from 'src/admin/products/entities/product.entity';
 
 
 export default function MysqlConnection (){
@@ -14,8 +14,9 @@ export default function MysqlConnection (){
     port: 3306,
     username: 'root',
     password: '',
-    database: 'shop',
-    entities: [Users, Customers, Orders, slot_deals, Product],
+    database: 'stores',
+    // entities: [Users, Customers, Orders, slot_deals, Product],
+    autoLoadEntities: true,
     migrations: [
       "migration/*.js"
   ]

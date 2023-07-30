@@ -15,8 +15,14 @@ export class Users {
   @Column()
   password: string;
 
-  @Column()
-  created_at: string;
+  @Column({ nullable: true, default: true })
+  created_at: Date = new Date();
+
+  @Column({ nullable: true })
+  updated_at: string;
+
+  @Column({ nullable: true })
+  role: number;
 
 
 }

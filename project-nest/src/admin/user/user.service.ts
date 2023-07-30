@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import {JwtService} from "@nestjs/jwt";
 import * as bcrypt from 'bcryptjs';
 import { CreateUserDto } from './dto/create-user.dto';
+import { DefaultResponse } from 'src/shared/response';
 
 @Injectable()
 export class UserService {
@@ -43,12 +44,12 @@ export class UserService {
       };
   }
 
-  async verify(token: string): Promise<Users | null> {
+  async verify(token: any): Promise<Users | any> {
       try {
           const payload = this.jwtService.verify(token);
           return this.usersRepository.findOne(payload.sub);
       } catch (error) {
-          return null;
+          return DefaultResponse.responseFailed({message: "Email or password incorrect!"});
       }
   }
   

@@ -3,6 +3,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
+import { DefaultResponse } from 'src/shared/response';
 @Injectable()
 export class AuthService {
   constructor(private usersService: UserService, private jwtService: JwtService) {}
@@ -12,11 +13,12 @@ export class AuthService {
     console.log(user);
 
     if (user == null) {
-      throw new UnauthorizedException();
+      return DefaultResponse.responseFailed({message: "Email or password incorrect!"});;
     }
     const payload = { sub: user.id, email: user.email };
     return {
-      access_token: await this.jwtService.signAsync(payload),
+      token: await this.jwtService.signAsync(payload),
+      user: payload
     };
   }
 }

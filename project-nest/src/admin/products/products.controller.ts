@@ -6,10 +6,11 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { FileInterceptor, MulterModule } from '@nestjs/platform-express';
 import { MaxFileSizeValidator, FileTypeValidator } from '@nestjs/common';
 import { diskStorage } from 'multer';
+import { FilesService } from '../files/files.service';
 
 @Controller('admin/products')
 export class ProductsController {
-  constructor(private readonly productsService: ProductsService) {}
+  constructor(private readonly productsService: ProductsService, private fileService: FilesService) {}
 
   @Post()
   create(@Body() createProductDto: CreateProductDto) {
@@ -42,7 +43,7 @@ export class ProductsController {
     return this.productsService.remove(+id);
   }
 
-  @Post('upload')
+  @Post('upload/:id')
   @UseInterceptors(FileInterceptor('file' ,{
     storage: diskStorage({
       destination:'./uploads/images',
@@ -56,6 +57,7 @@ export class ProductsController {
   }
   ))
   uploadFile(
+    @Param('id') id,
     @UploadedFile(
       new ParseFilePipe({
         validators: [
@@ -65,11 +67,18 @@ export class ProductsController {
       }),
     )
     file: Express.Multer.File) {
-      return {
-        status: "success",
-        msg: "Uploaded file successfully",
-        path: file.path
+      console.log("==id=>", id)
+      const data = {
+        name: file.fieldname,
+        path: file.path,
+        product_id: id
       }
+      return this.fileService.productMedia(id,data)
+      // return {
+      //   status: "success",
+      //   msg: "Uploaded file successfully",
+      //   path: file.path
+      // }
 
     }
 }

@@ -5,6 +5,7 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { Like, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
+import { DefaultResponse } from 'src/shared/response';
 
 @Injectable()
 export class ProductsService {
@@ -24,8 +25,8 @@ export class ProductsService {
 
   async pagination(query) {
     let queryString = {};
-    const rowsPerPage = query.rowsPerPage || 15;
-    const page = query.page || 1;
+    const rowsPerPage =  parseInt(query.rowsPerPage) || 15;
+    const page = parseInt(query.page) || 1;
     const skip = (page - 1) * rowsPerPage; 
     const sortBy = query.sortBy || 'name';
     const keyword = query.key || '';
@@ -50,10 +51,23 @@ export class ProductsService {
     }
 
     console.log(keyword);
-    const result = await this.productRepository.createQueryBuilder("products")
-    .where("products.id = :id", { id: 2 })
-    .getOne()
-    return result;
+    // const result = await this.productRepository.createQueryBuilder("products")
+    // .where("products.id = :id", { id: 2 })
+    // .getOne()
+    const [result, total] = await this.productRepository.findAndCount(queryString);
+
+    const lastPage = Math.ceil(total / rowsPerPage);
+    console.log(lastPage);
+    const nextPage= page+1 > lastPage ? null : page + 1;
+    const prevPage=page-1 < 1 ? null :page-1;
+    const pageDetail = {
+      total: total,
+      page: page,
+      nextPage: nextPage,
+      prevPage: prevPage,
+      rowsPerPage: rowsPerPage
+    }
+    return DefaultResponse.responsePagination(result, pageDetail);
   }
 
   findOne(id) {
@@ -66,6 +80,7 @@ export class ProductsService {
       const updateD = {
         ...product[0],
         ...updateProductDto,
+        image: []
       };
       return await this.productRepository.save(updateD);
     }

@@ -2,9 +2,17 @@ import { Injectable, Res } from '@nestjs/common';
 import { CreateFileDto } from './dto/create-file.dto';
 import { UpdateFileDto } from './dto/update-file.dto';
 import { readFile } from 'fs';
+import { InjectRepository } from '@nestjs/typeorm';
+import { ProductMedia } from './entities/product.media.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class FilesService {
+    constructor(
+        @InjectRepository(ProductMedia)
+        private prodReposity: Repository<ProductMedia>, // eslint-disable-next-line @typescript-eslint/no-empty-function
+    ) {}
+
     create(createFileDto: CreateFileDto) {
         return 'This action adds a new file';
     }
@@ -41,5 +49,8 @@ export class FilesService {
 
     remove(id: number) {
         return `This action removes a #${id} file`;
+    }
+    async productMedia(id: number, data) {
+        return await this.prodReposity.save(data);
     }
 }

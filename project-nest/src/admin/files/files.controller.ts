@@ -7,7 +7,6 @@ import {
     Param,
     Delete,
     Res,
-    Query,
 } from '@nestjs/common';
 import { FilesService } from './files.service';
 import { CreateFileDto } from './dto/create-file.dto';
