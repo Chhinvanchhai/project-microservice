@@ -14,7 +14,6 @@ export class AdminMiddleware implements NestMiddleware {
 
     async use(req: Request, res: Response, next: NextFunction) {
         const token = this.extractTokenFromHeader(req);
-        console.log("token", token);
         try {
             console.log('path==', req.path);
             if (req.path != '/auth/login' && req.path != '/user/create') {
@@ -28,7 +27,7 @@ export class AdminMiddleware implements NestMiddleware {
                     throw new UnauthorizedException();
                 }
             }
-            next();
+            // next();
         } catch (e) {
             console.log(e);
             throw new UnauthorizedException();

@@ -15,14 +15,12 @@ export default function MysqlConnection (){
     username: 'root',
     password: '',
     database: 'stores',
-    // entities: [Users, Customers, Orders, slot_deals, Product],
+    // synchronize: true,
     autoLoadEntities: true,
     migrations: [
       "migration/*.js"
-  ]
-    // logging: true
-    // synchronize: true,
-    
+  ],
+    // logging: true    
   })
 
 // return  TypeOrmModule.forRoot({

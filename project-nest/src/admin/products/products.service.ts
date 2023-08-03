@@ -38,6 +38,10 @@ export class ProductsService {
       order: {
         [sortBy]: sortOrder,
       },
+      relations:{
+        images: true,
+        category:true
+      },
     };
     if (keyword != '') {
       queryString = {
@@ -47,6 +51,11 @@ export class ProductsService {
         order: {
           [sortBy]: sortOrder,
         },
+        relations:{
+          images: true,
+          category:true
+        },
+        
       };
     }
 
@@ -67,6 +76,15 @@ export class ProductsService {
       prevPage: prevPage,
       rowsPerPage: rowsPerPage
     }
+    result.map(item => {
+      if(item.images && item.images.length){
+        item.images.map(image => {
+          image.path = process.env.APP_URL + "/api/v1/files/"+image.name;
+          return image;
+        });
+      }
+      return item;
+    })
     return DefaultResponse.responsePagination(result, pageDetail);
   }
 

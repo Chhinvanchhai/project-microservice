@@ -51,7 +51,7 @@ export class ProductsController {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
         const extArray = file.mimetype.split("/");
         const extension = extArray[extArray.length - 1];
-        cb(null, file.fieldname + '-' + uniqueSuffix+'.'+extension)
+        cb(null, uniqueSuffix+'.'+extension)
       }
     })
   }
@@ -67,18 +67,14 @@ export class ProductsController {
       }),
     )
     file: Express.Multer.File) {
-      console.log("==id=>", id)
+      const name = file.path.split('/')[2];
       const data = {
-        name: file.fieldname,
+        name: name,
         path: file.path,
-        product_id: id
+        type: file.fieldname,
+        product_id: parseInt(id)
       }
-      return this.fileService.productMedia(id,data)
-      // return {
-      //   status: "success",
-      //   msg: "Uploaded file successfully",
-      //   path: file.path
-      // }
+      return this.fileService.productMedia(data)
 
     }
 }

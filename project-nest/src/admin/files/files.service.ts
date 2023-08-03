@@ -42,6 +42,27 @@ export class FilesService {
             }
         });
     }
+    viewsMedia(path: string, res) {
+        const filename = `./${path}`;
+        readFile(filename, (err, data) => {
+            if (err) {
+                res.status(404).send('File not found');
+            } else {
+                const name = path.split('.');
+                const types = name[name.length - 1];
+                const extension = types[types.length - 1];
+                if (extension == 'pdf') {
+                    res.setHeader('Content-Type', 'application/pdf');
+                    console.log(extension);
+                    return res.send(data);
+                } else {
+                    const type = `image/${extension}`;
+                    res.contentType(type);
+                    return res.send(data);
+                }
+            }
+        });
+    }
 
     update(id: number, updateFileDto: UpdateFileDto) {
         return `This action updates a #${id} file`;
@@ -50,7 +71,7 @@ export class FilesService {
     remove(id: number) {
         return `This action removes a #${id} file`;
     }
-    async productMedia(id: number, data) {
+    async productMedia(data) {
         return await this.prodReposity.save(data);
     }
 }

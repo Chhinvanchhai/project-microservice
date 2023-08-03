@@ -1,8 +1,9 @@
 /* eslint-disable prettier/prettier */
 import { Optional } from '@nestjs/common';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn} from 'typeorm';
-// import { Customers } from '../customers/customers.entity';
-
+import { IsNotEmpty } from 'class-validator';
+import { Category } from 'src/admin/category/entities/category.entity';
+import { ProductMedia } from 'src/admin/files/entities/product.media.entity';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany, JoinTable} from 'typeorm';
 interface Image {
   path: string;
   name: string;
@@ -15,42 +16,36 @@ export class Product {
   @Column()
   name: string;
 
+  @IsNotEmpty()
   @Column()
-  sub_category_id: number;
+  subcategory_id: number;
 
   @Column()
+  @IsNotEmpty()
   category_id: number;
+ 
+  @Column()
+  @IsNotEmpty()
+  description: string;
 
   @Column()
-  sku: string;
+  @IsNotEmpty()
+  price: number;
 
   @Column()
-  quantity: number;
+  @IsNotEmpty()
+  stock_quantity: number;
+
+  @Column({ default: true})
+  created_at: Date = new Date();
 
   @Column()
-  slug: string;
 
-  @Column()
-  meta_title: string;
-
-  @Column()
-  meta_description: string;
-
-  @Column()
-  meta_keywords: string;
-
-  @Column()
-  views: number;
-
-  // @Column({ nullable: true })
-  // media: number;
-
-  @Column()
-  created_at: Date;
-
-  @Column()
   updated_at: Date;
-
-
-
+  @OneToMany(()=> ProductMedia, (productMedia: ProductMedia) =>  productMedia.product)
+  images: ProductMedia[];
+  
+  @ManyToOne(() => Category, (category: Category) => category.products)
+  @JoinColumn({ name: 'category_id' })
+  category: Category;
 }

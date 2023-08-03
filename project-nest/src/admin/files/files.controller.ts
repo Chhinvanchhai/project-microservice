@@ -13,26 +13,31 @@ import { CreateFileDto } from './dto/create-file.dto';
 import { UpdateFileDto } from './dto/update-file.dto';
 import { Response } from 'express';
 
-@Controller('files')
+@Controller()
 export class FilesController {
     constructor(private readonly filesService: FilesService) {}
 
-    @Post()
+    @Post('files')
     create(@Body() createFileDto: CreateFileDto) {
         return this.filesService.create(createFileDto);
     }
 
-    @Get(':id')
+    @Get('files/:id')
     views(@Param('id') id, @Res() res: Response) {
         return this.filesService.views(id, res);
     }
 
-    @Patch(':id')
+    @Get('media/{path}')
+    viewMedia(@Param('path') path, @Res() res: Response) {
+        return this.filesService.viewsMedia(path, res);
+    }
+
+    @Patch('files/:id')
     update(@Param('id') id: string, @Body() updateFileDto: UpdateFileDto) {
         return this.filesService.update(+id, updateFileDto);
     }
 
-    @Delete(':id')
+    @Delete('files/:id')
     remove(@Param('id') id: string) {
         return this.filesService.remove(+id);
     }
